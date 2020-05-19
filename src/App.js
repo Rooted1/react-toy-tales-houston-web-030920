@@ -7,22 +7,19 @@ import ToyContainer from './components/ToyContainer'
 
 import data from './data'
 
-
 class App extends React.Component{
-  //implement rendering toys on page
-  // add empty toys array in state that would be updated by fetch request
+
   state = {
-    display: false
+    display: false,
+    toys: []
   }
 
-  // implement rendering toys on page
-  // in componentDidMount fetch data
-  // update toys array in state
-
-  // implement increase likes
-  // create handleUpdateLikes method
-  // receives argument from ToyContainer
-  // run fetch to update the toy (by id) likes
+// fetch data from database
+componentDidMount() {
+  fetch('http://localhost:3000/toys')
+  .then(resp => resp.json())
+  .then(obj => this.setState({toys: obj}))
+}
 
   handleClick = () => {
     let newBoolean = !this.state.display
@@ -31,9 +28,43 @@ class App extends React.Component{
     })
   }
 
-    // implement creating a new toy
-    //create addNewToy method that gets a state as argument from ToyForm
-    // pass the new toy details into fetch to save in database
+  // implement creating new toy
+  addNewToy = (toyState) => {
+    fetch('http://localhost:3000/toys', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: toyState.name,
+        image: toyState.image,
+        likes: 0
+      })
+    })
+  }
+
+  /// implement deleting toy
+  deleteToyFromToys = (toyId) => {
+    fetch(`http://localhost:3000/toys/${toyId}`, {
+      method: 'DELETE'
+    })
+    .catch(err => console.error(err))
+  }
+
+  // implement increase toy likes
+  increaseLikes = (toyState) => {
+    fetch(`http://localhost:3000/toys/${toyState.id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        likes: toyState.likes + 1
+      })
+    })
+    .catch(err => console.error(err))
+
+  }
 
   render(){
     return (
@@ -41,8 +72,8 @@ class App extends React.Component{
         <Header/>
         { this.state.display
             ?
-            // pass addNewToy to ToyForm component as a variable addNewToy
-          <ToyForm/>
+
+          <ToyForm addNewToy={this.addNewToy}/>
             :
           null
         }
@@ -50,10 +81,8 @@ class App extends React.Component{
           <button onClick={this.handleClick}> Add a Toy </button>
         </div>
 
-        // implement rendering toys on page
-        // receives this.state.toys as a prop and saves on toys var
-        // receives handleUpdateLikes as handleUpdateLikes var
-        <ToyContainer/>
+
+        <ToyContainer toys={this.state.toys} deleteToyFromToys={this.deleteToyFromToys} increaseLikes={this.increaseLikes}/>
       </>
     );
   }

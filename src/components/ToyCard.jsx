@@ -1,41 +1,40 @@
 import React, { Component } from 'react';
 
 class ToyCard extends Component {
-  // create a state varaible to hold toy likes
-  // set props and values
-  // {
-      //likes: this.props.toy.likes
-    //}
 
-  // implement increasing Likes
-  // create handlelikes method
-  // update state to change likes by one when button is clicked
-  // grab state and pass as an argument into handleLikes()
+  state = {
+    id: this.props.toy.id,
+    likes: this .props.toy.likes
+  }
+  setLikes = () => this.setState({likes: this.state.likes + 1})
 
-  // implement deleting toy
-  // create handleClick method
-  // pass this.props.handleDelete that takes this.props.toy as argument
+  // get toy id and likes
+  handleLikes = () => {
+    this.setLikes()
+    this.props.handleLikeIncrease(this.state)
+  }
+
+  // get toy id
+  handleDelete = () => {
+    this.props.deleteToy(this.state.id)
+  }
 
   render() {
     return (
-      //implement rendering toys on page
-      // renders this.props.toy.name
+
       <div className="card">
-        <h2>{'' /* Toy's Name */}</h2>
+        <h2>{this.props.toy.name}</h2>
 
-        //receives this.props.toy.image
-        <img src={'' /* Toy's Image */} alt={/* Toy's Name */} className="toy-avatar" />
 
-        // implement increisng likes
-        // receives this.state.likes
-        <p>{'' /* Toy's Likes */} Likes </p>
+        <img src={this.props.toy.image} alt={'alt-text'} className="toy-avatar" />
 
-        // implement increase likes
-        <button className="like-btn">Like {'<3'}</button>
 
-        // implement deleting toy from page
-        // create onClick event that receives handleClick method
-        <button className="del-btn">Donate to GoodWill</button>
+        <p>{this.state.likes} Likes </p>
+
+
+        <button className="like-btn" onClick={this.handleLikes}>Like {'<3'}</button>
+
+        <button className="del-btn" onClick={this.handleDelete}>Donate to GoodWill</button>
       </div>
     );
   }

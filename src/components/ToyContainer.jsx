@@ -1,34 +1,29 @@
-import React from 'react';
+import React, { Component }  from 'react';
 import ToyCard from './ToyCard'
 
-// receives props
-const ToyContainer = () => {
 
-  // implement deleting toy from toys
-  // create handleDelete method
-  // receives toy details as argument
-  // two things:
-    // either do a fetch here to delete toy details from database
-    // or send toy details to App to delete from database
+class ToyContainer extends Component {
 
-  // implement increase likes
-  // create handleLikes method
-  // receives this.props.state from ToyCard
-  // pass state as an argument into handleUpdateLikes in App.js
+  // grab current toy likes
+  handleLikeIncrease = (toyState) => {
+    this.props.increaseLikes(toyState)
+  }
 
-  return(
-    <div id="toy-collection">
-    //implement rendering toys on page
-    // map over props.toys
-    // render each toy in ToyCard component on page
+  // grab id of current toy
+  deleteToy = (toyId) => {
+    this.props.deleteToyFromToys(toyId)
+  }
 
-    // implement deleting toy
-    // pass this.handleDelete method to ToyCard as handleDelete var
+  render(){
+    return(
+      <div id="toy-collection">
 
-    // pass this.handleLikes to handleLikes var
-      {/* Render the collection of ToyCards */}
-    </div>
-  );
+      {this.props.toys.map(toy => (
+        <ToyCard key={toy.id} toy={toy} handleLikeIncrease={this.handleLikeIncrease} deleteToy={this.deleteToy}/>
+      ))}
+      </div>
+    );
+  }
 }
 
 export default ToyContainer;

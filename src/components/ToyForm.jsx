@@ -1,27 +1,29 @@
 import React, { Component } from 'react';
 
 class ToyForm extends Component {
-  // implement creating a new toy
-  // create state variable that would hold the new toy details
-  // set the properties (name, imgUrl) in state to empty string
+  state = {
+    name: '',
+    image: ''
+  }
 
-  // create handleSubmit method
-  // pass in this.props.addNewToy that receives state as an argument
+  setName = e => this.setState({name: e.target.value})
+  setImage = e => this.setState({image: e.target.value})
+
+  handleSubmit = () => {
+    this.props.addNewToy(this.state)
+  }
 
   render() {
     return (
       <div className="container">
-        // create onSubmit event that listens for when user clicks submit
-        // this event receives this.handleSubmit method
-        <form className="add-toy-form">
+
+        <form className="add-toy-form" onSubmit={this.handleSubmit}>
           <h3>Create a toy!</h3>
-          // pass this.state.name into value
-          <input type="text" name="name" placeholder="Enter a toy's name..." className="input-text"/>
+          <input type="text" name="name" placeholder="Enter a toy's name..." className="input-text" value={this.state.name} onChange={this.setName}/>
           <br/>
-          //pass this.state.imgUrl into value
-          <input type="text" name="image" placeholder="Enter a toy's image URL..." className="input-text"/>
+          <input type="text" name="image" placeholder="Enter a toy's image URL..." className="input-text" value={this.state.image} onChange={this.setImage}/>
           <br/>
-          <input type="submit" name="submit" value="Create New Toy" className="submit"/>
+          <input type="submit" name="submit" value="Create New Toy" className="submit" />
         </form>
       </div>
     );
